@@ -16,7 +16,7 @@ node server.js
 ````
 
 #設定
-* 編輯 draw1.html 及 draw2.html 中的 serverip，更改為 server 的區網 ip
+* 編輯 index.html、draw1.html 及 draw2.html 中的 serverip，更改為 server 的區網 ip
 
 #使用
 打開網頁瀏覽器，前往
