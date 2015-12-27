@@ -1,7 +1,8 @@
 <script src="/socket.io/socket.io.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <script>
-var socket = io.connect('http://localhost:8080');
+var serverip =  "192.168.0.103";
+var socket = io.connect('http://'+serverip+':8080');
 var lastX=Array;
 var lastY=Array;
 
