@@ -62,21 +62,21 @@ $(document).ready(function() {
 });
 //BUG HERE
 function draw(e) {
-        console.log(e.client);
-        canvas = document.getElementById('board'+e.client);
-        ctx = canvas.getContext("2d");
-        if (e.draw ) {
-            ctx.beginPath();
-            ctx.strokeStyle = '#333333';
-            ctx.lineWidth = '9';;
-            ctx.lineJoin = "round";
-            ctx.moveTo(lastX[e.client], lastY[e.client]);
-            ctx.lineTo(e.x, e.y);
-            ctx.closePath();
-            ctx.stroke();
-        }
-        lastX[e.client] = e.x; lastY[e.client] = e.y;
-        //console.log(lastaX[e.client],lastaY[e.client]);
+    console.log(e.client);
+    canvas = document.getElementById('board'+e.client);
+    ctx = canvas.getContext("2d");
+    if (e.draw ) {
+        ctx.beginPath();
+        ctx.strokeStyle = '#333333';
+        ctx.lineWidth = '9';;
+        ctx.lineJoin = "round";
+        ctx.moveTo(lastX[e.client], lastY[e.client]);
+        ctx.lineTo(e.x, e.y);
+        ctx.closePath();
+        ctx.stroke();
+    }
+    lastX[e.client] = e.x; lastY[e.client] = e.y;
+    //console.log(lastaX[e.client],lastaY[e.client]);
 
 
     isinitcan[e.client]=1;
@@ -84,20 +84,19 @@ function draw(e) {
 }
 function draw1(e) {
 
-        console.log(e.client);
-        canvas1 = document.getElementById('board1');
-        ctx1 = canvas1.getContext("2d");
-        if (e.draw ) {
-            ctx1.beginPath();
-            ctx1.strokeStyle = '#333333';
-            ctx1.lineWidth = '9';;
-            ctx1.lineJoin = "round";
-            ctx1.moveTo(last1X, last1Y);
-            ctx1.lineTo(e.x, e.y);
-            ctx1.closePath();
-            ctx1.stroke();
-        }
-        last1X = e.x; last1Y = e.y;
+    canvas1 = document.getElementById('board1');
+    ctx1 = canvas1.getContext("2d");
+    if (e.draw ) {
+        ctx1.beginPath();
+        ctx1.strokeStyle = '#333333';
+        ctx1.lineWidth = '9';;
+        ctx1.lineJoin = "round";
+        ctx1.moveTo(last1X, last1Y);
+        ctx1.lineTo(e.x, e.y);
+        ctx1.closePath();
+        ctx1.stroke();
+    }
+    last1X = e.x; last1Y = e.y;
 
     isinitcan[1]=1;
 
