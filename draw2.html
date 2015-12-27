@@ -6,7 +6,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script>
     $(document).ready(function() {
-        var socket = io.connect('http://192.168.0.103:8080');
+        var serverip =  "192.168.0.103";
+        var socket = io.connect('http://'+serverip+':8080');
         canvas = document.getElementById('board');
         var isinitcan=0;
         function initcanvas(){
