@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        var socket = io.connect('http://192.168.0.103:8080');
+        canvas = document.getElementById('board');
+        var isinitcan=0;
+        function initcanvas(){
+            ctx.moveTo(w/3,0);
+            ctx.lineTo(w/3,h);
+            ctx.moveTo(2*w/3,0);
+            ctx.lineTo(2*w/3,h);
+            ctx.moveTo(0,w/3);
+            ctx.lineTo(w,w/3);
+            ctx.moveTo(0,2*w/3);
+            ctx.lineTo(w,2*w/3);
+            ctx.strokeStyle = '#FF0000';
+            ctx.lineWidth = '2';
+            ctx.stroke();
+            isinitcan=1;
+        }
+        ctx = canvas.getContext("2d");
+
+        w = canvas.width;
+        h = canvas.height;
+        initcanvas();
+
+        var drawing = false;
+        canvas.addEventListener("mousemove", function (e) {
+            if (drawing) Draw(e.pageX - $(this).offset().left, e.pageY - $(this).offset().top, true);
+        }, false);
+        canvas.addEventListener("mousedown", function (e) {
+            drawing = true;
+            Draw(e.pageX - $(this).offset().left, e.pageY - $(this).offset().top, false);
+        }, false);
+        canvas.addEventListener("mouseup", function (e) {drawing = false;}, false);
+        canvas.addEventListener("mouseout", function (e) {drawing = false;}, false);
+
+
+        canvas.addEventListener('touchstart', function (e) {
+            drawing = true;
+            Draw(e.pageX - $(this).offset().left, e.pageY - $(this).offset().top, false);
+        }, false);
+        canvas.addEventListener('touchmove', function (e) {
+            e.preventDefault();
+            if (drawing) Draw(e.pageX - $(this).offset().left, e.pageY - $(this).offset().top, true);
+        }, false);
+        canvas.addEventListener('touchend',function (e) {drawing = false;console.log("end");}, false);
+
+
+        function draw(e) {
+            cX = e.clientX - canvas.offsetLeft;
+            cY = e.clientY - canvas.offsetTop;
+            ctx.strokeStyle = '#333333';
+            ctx.lineTo(cX, cY);
+            ctx.stroke();
+
+
+        }
+
+        function Draw(x, y, isDown) {
+            if (isDown) {
+                ctx.beginPath();
+                ctx.strokeStyle = '#333333';
+                ctx.lineWidth = '9';
+                ctx.lineJoin = "round";
+                ctx.moveTo(lastX, lastY);
+                ctx.lineTo(x, y);
+                ctx.closePath();
+                ctx.stroke();
+            }
+            lastX = x; lastY = y;
+            socket.emit('draw',{client:2,x:lastX,y:lastY,draw:isDown});
+            isinitcan=1;
+        }
+
+
+        function clearArea() {
+            // Use the identity matrix while clearing the canvas
+            if(isinitcan==1){
+                ctx.setTransform(1, 0, 0, 1, 0, 0);
+                ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+                initcanvas();
+            }
+            isinitcan=0;
+            socket.emit('clean',{client:2});
+        }
+
+        $("#clean").click(function(){
+            clearArea();
+        });
+
+    });
+
+
+    </script>
+    <style type="text/css">
+    #board {
+        border:2px
+        solid #FF0000;
+    }
+
+    </style>
+</head>
+<body>
+    <canvas id="board" width="480" height="480"></canvas>
+
+    <button id="clean">clean</button>
+</body>
+</html>

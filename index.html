@@ -1,0 +1,144 @@
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script>
+var socket = io.connect('http://localhost:8080');
+var lastX=Array;
+var lastY=Array;
+
+var isinitcan=Array;
+isinitcan[1]=0;
+isinitcan[2]=0;
+socket.on('clean', function (data) {
+    if (data.client==1) {
+        clearArea(data);
+        isinitcan[1]=0;
+    }
+
+    if(data.client==2){
+        clearArea(data);
+        isinitcan[2]=0;
+    }
+
+});
+
+socket.on('draw', function (data) {
+    if (data.client==1) {
+        draw1(data);
+    }
+    if(data.client==2){
+        draw2(data);
+    }
+    //draw(data);
+
+});
+
+
+function initcanvas(ctx,id){
+    ctx.moveTo(w/3,0);
+    ctx.lineTo(w/3,h);
+    ctx.moveTo(2*w/3,0);
+    ctx.lineTo(2*w/3,h);
+    ctx.moveTo(0,w/3);
+    ctx.lineTo(w,w/3);
+    ctx.moveTo(0,2*w/3);
+    ctx.lineTo(w,2*w/3);
+    ctx.strokeStyle = '#FF0000';
+    ctx.lineWidth = '2';
+    ctx.stroke();
+    isinitcan[id]=1;
+
+
+}
+$(document).ready(function() {
+    canvas = document.getElementById('board1');
+    ctx = canvas.getContext("2d");
+    w = canvas.width;
+    h = canvas.height;
+    initcanvas(ctx,1);
+    canvas = document.getElementById('board2');
+    ctx = canvas.getContext("2d");
+    initcanvas(ctx,2);
+});
+//BUG HERE
+function draw(e) {
+        console.log(e.client);
+        canvas = document.getElementById('board'+e.client);
+        ctx = canvas.getContext("2d");
+        if (e.draw ) {
+            ctx.beginPath();
+            ctx.strokeStyle = '#333333';
+            ctx.lineWidth = '9';;
+            ctx.lineJoin = "round";
+            ctx.moveTo(lastX[e.client], lastY[e.client]);
+            ctx.lineTo(e.x, e.y);
+            ctx.closePath();
+            ctx.stroke();
+        }
+        lastX[e.client] = e.x; lastY[e.client] = e.y;
+        //console.log(lastaX[e.client],lastaY[e.client]);
+
+
+    isinitcan[e.client]=1;
+
+}
+function draw1(e) {
+
+        console.log(e.client);
+        canvas1 = document.getElementById('board1');
+        ctx1 = canvas1.getContext("2d");
+        if (e.draw ) {
+            ctx1.beginPath();
+            ctx1.strokeStyle = '#333333';
+            ctx1.lineWidth = '9';;
+            ctx1.lineJoin = "round";
+            ctx1.moveTo(last1X, last1Y);
+            ctx1.lineTo(e.x, e.y);
+            ctx1.closePath();
+            ctx1.stroke();
+        }
+        last1X = e.x; last1Y = e.y;
+
+    isinitcan[1]=1;
+
+}
+function draw2(e) {
+    canvas2 = document.getElementById('board2');
+    ctx2 = canvas2.getContext("2d");
+    if (e.draw ) {
+        ctx2.beginPath();
+        ctx2.strokeStyle = '#333333';
+        ctx2.lineWidth = '9';;
+        ctx2.lineJoin = "round";
+        ctx2.moveTo(last2X, last2Y);
+        ctx2.lineTo(e.x, e.y);
+        ctx2.closePath();
+        ctx2.stroke();
+    }
+    last2X = e.x; last2Y = e.y;
+    isinitcan[2]=1;
+}
+
+function clearArea(e) {
+    // Use the identity matrix while clearing the canvas
+    canvas = document.getElementById('board'+e.client);
+    ctx = canvas.getContext("2d");
+    if(isinitcan[e.client]==1){
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        initcanvas(ctx);
+    }
+
+}
+</script>
+<style type="text/css">
+canvas {
+    border:2px
+    solid #FF0000;
+}
+</style>
+<body>
+    <canvas name="board" id="board1" width="480" height="480"></canvas>
+    <canvas name="board" id="board2" width="480" height="480"></canvas>
+
+
+</body>
