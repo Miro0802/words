@@ -53,16 +53,6 @@
         canvas.addEventListener('touchend',function (e) {drawing = false;console.log("end");}, false);
 
 
-        function draw(e) {
-            cX = e.clientX - canvas.offsetLeft;
-            cY = e.clientY - canvas.offsetTop;
-            ctx.strokeStyle = '#333333';
-            ctx.lineTo(cX, cY);
-            ctx.stroke();
-
-
-        }
-
         function Draw(x, y, isDown) {
             if (isDown) {
                 ctx.beginPath();
@@ -76,7 +66,6 @@
             }
             lastX = x; lastY = y;
             socket.emit('draw',{client:1,x:lastX,y:lastY,draw:isDown});
-
             isinitcan=1;
         }
 
