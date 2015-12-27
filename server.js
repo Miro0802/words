@@ -19,7 +19,7 @@ app.get('/draw2', function (req, res) {
 
 io.on('connection', function (socket) {
     socket.on('draw',function(data){
-        console.log(data);
+        //console.log(data);
         socket.broadcast.emit('draw',data);
     });
 
